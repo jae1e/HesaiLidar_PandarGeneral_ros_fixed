@@ -339,17 +339,22 @@ PandarGeneral_Internal::~PandarGeneral_Internal() {
  */
 int PandarGeneral_Internal::LoadCorrectionFile(std::string correction_content) {
   std::istringstream ifs(correction_content);
+  printf("correction file: %s\n", correction_content.c_str());
 
   std::string line;
   if (std::getline(ifs, line)) {  // first line "Laser id,Elevation,Azimuth"
     std::cout << "Parse Lidar Correction..." << std::endl;
   }
+  std::cout << "First line\n";
+  std::cout << line << std::endl;
+  std::cout << "First line done\n";
 
   double azimuthOffset[HS_LIDAR_L64_UNIT_NUM];
   double elev_angle[HS_LIDAR_L64_UNIT_NUM];
 
   int lineCounter = 0;
   while (std::getline(ifs, line)) {
+    std::cout << lineCounter << " " << HS_LIDAR_L64_UNIT_NUM << std::endl;
     if (lineCounter++ >= HS_LIDAR_L64_UNIT_NUM) break;
 
     int lineId = 0;
@@ -370,6 +375,7 @@ int PandarGeneral_Internal::LoadCorrectionFile(std::string correction_content) {
 
     elev_angle[lineId - 1] = elev;
     azimuthOffset[lineId - 1] = azimuth;
+    printf("lineId elev azimuth %d %f %f\n", lineId, elev, azimuth);
   }
 
   for (int i = 0; i < HS_LIDAR_L64_UNIT_NUM; ++i) {

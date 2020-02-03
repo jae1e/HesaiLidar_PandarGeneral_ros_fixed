@@ -7,6 +7,9 @@
 #include <pcl/point_types.h>
 #include "pandarGeneral_sdk/pandarGeneral_sdk.h"
 
+#include <fstream>
+#include <streambuf>
+
 using namespace std;
 
 class HesaiLidarClient
@@ -57,6 +60,12 @@ public:
       hsdk = new PandarGeneralSDK(serverIp, lidarRecvPort, gpsPort, \
           boost::bind(&HesaiLidarClient::lidarCallback, this, _1, _2), \
           NULL, 0, 0, lidarType);
+          
+      std::ifstream fstream(lidarCorrectionFile);
+      std::string correction_content((std::istreambuf_iterator<char>(fstream)),
+                                      std::istreambuf_iterator<char>());
+      
+      hsdk->LoadLidarCorrectionFile(correction_content);
     }
 
     hsdk->Start();
